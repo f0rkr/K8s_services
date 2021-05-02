@@ -123,3 +123,20 @@ So there are two connections to configure, Telegraf to InfluxDB which is done in
 
 To provide an already-configured version of Grafana, I advise you to setup a blank Grafana setup, launch you container, configure everything. Then save the grafana.db file on your computer (you can use "kubectl cp" to get data from a running pod). You can now copy this file in your Dockerfile.
 
+**Setting up Metallb LoadBalancer:**
+
+- To install MetalLB, apply the manifest:
+
+    ```bash
+    kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.5/manifests/namespace.yaml
+    kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.5/manifests/metallb.yaml
+    # On first install only
+    kubectl create secret generic -n metallb-system memberlist --from-literal=secretkey="$(openssl rand -base64 128)"
+    ```
+
+    ---
+
+- Then chose type of configuration from here:
+
+    [MetalLB, bare metal load-balancer for Kubernetes](https://metallb.universe.tf/configuration/)
+
