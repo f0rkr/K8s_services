@@ -23,7 +23,7 @@ K8s services consists of implementing and building an infrastructure with differ
 
 - ```Grafana```: Is a open-source graphing and analisys software. Allows you to query, view, alert, and explore your metrics from Time Series Database Storage(TSDB)
 
-# Installation 🖥
+# Installation 👾
 
 Feel free to use my script to install all required software to set you up:
 
