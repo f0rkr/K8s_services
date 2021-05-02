@@ -31,7 +31,8 @@ Feel free to use my script to install all required software to set you up:
 
 ```
 # Use the setup.sh script to build the docker images and deploye kubernetes.
-f0rkr@shell$ sh setup.sh 
+f0rkr@shell$ chmod +x setup.sh
+f0rkr@shell$ ./setup.sh 
 ```
 
 # Resources:
