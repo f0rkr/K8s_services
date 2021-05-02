@@ -1,128 +1,54 @@
 # K8s_services
 <center><img src='https://camo.githubusercontent.com/6171898673c3f84e17e032036cd659446bf105ce6d2923e97a13b4bf3c5d6b4f/68747470733a2f2f64333377756272666b69306c36382e636c6f756466726f6e742e6e65742f656234653431663263626130636263386431313966386430656232626436393335636237386663382f62613764362f696d616765732f636f6d6d756e6974792f6b756265726e657465732d636f6d6d756e6974792d66696e616c2d30322e6a7067'/></center>
 
-☸️: Kubernetes cheat sheet
+K8s services consists of implementing and building an infrastructure with different services using kubernetes.
 
-```bash
-# Create a pod from a YAML file
-kubectl create -f <yourfile.yaml>
 
-# Delete a pod
-kubectl delete deployment <your deployment>
-kubectl delete service <your service>
-# and so on if you have different objects
+# Containers:
+- ```MetalLB```: Is a Load Balancer that manages external access to its services. It is the only entrance to the cluster.
 
-# Get a shell in a pod
-# First get the pod full name with:
-kubectl get pods
-# Then, your pod name should look like "grafana-5bbf569f68-svdnz"
-kubectl exec -it <pod name> -- /bin/sh
+- ```Nginx```: Is an HTTP and reverse proxy server, a mail proxy server, and a generic TCP/UDP proxy server.
 
-# Copy data to pod or to our computer
-kubectl cp <pod name>:<file> <to>
-# or vice versa
-kubectl cp <from> <pod name>:<to>
+- ```vsFTPd```: [very secure FTP daemon] Is an FTP server for Unix-like system, including Linux.
 
-# Restart a deployment
-kubectl rollout restart deployment <name>
+- ```MariaDB```: Is a database management system derived from MySQL with a GPL (General Public License).
 
-# Launch minikube dashboard
-minikube dashboard
+- ```Wordpress```: Is a CMS(Content Managament System) focused on the creation of any type of web page.
 
-# Get cluster external IP
-minikube ip
+- ```phpMyAdmin```: Is a free software tool intended to handle the administration of MySQL over the web.
 
-# Reset Minikube VM
-minikube delete
-```
-🐳: Docker cheat sheet
+- ```InfluxDB```: Is a open-source time series database developed by InfluxData
 
-```bash
-# Build a docker image from a Dockerfile
-docker build -t <your image name> <your Dockerfile dir>
+- ```Telegraf```: Is the open-source server agent to help you collect metrics from your stacks, sensors and systems.
 
-# Start an instance of a docker image
-docker run -it <your image name>
-# Really important if you want to bind some ports on the container 
-# to your own computer, use -p option.
-# Exemple for an Apache image using port 80 in the container as our port 80
-docker run -it debian:apache -p80:80
+- ```Grafana```: Is a open-source graphing and analisys software. Allows you to query, view, alert, and explore your metrics from Time Series Database Storage(TSDB)
 
-# See all images
-docker images
+Installation 🖥
 
-# See running containers
-docker ps
+Feel free to use my script to install all required software to set you up:
 
-# Stop a container
-docker kill <container ID>
+[k8s Session setup](https://github.com/f0rkr/k8s-42-session-setup)
 
-# Delete all unused Docker images and cache and free SO MUCH SPACE on 
-# your computer
-docker system prune
-```
+Then use the setup.sh script to build the docker images and deploye kubernetes.
 
-## Containers 🔥
+# Use the setup.sh script with an argument, according to your environment
+`f0rkr@shell$ sh setup.sh `
+# or
+`f0rkr@shell$ sh setup.sh`
 
-### Nginx
-Nginx is a web server that can provide web pages and execute PHP (a language for web backend). You need to create a simple Nginx server, it has to be fetchable through Ingres, which is a more advanced version of service. Port 443 is for SSL connection (https). You can create a SSL certificate with Openssl.
-This container needs to provide a SSH connection. SSH is used to access a computer remotly through a shell.
-A really simple way to create a SSH server is through the openssh package and then run the sshd daemon.
-
-### FTPs
-A simple FTPs server. FTP is a protocol to send and download files from a distant computer. FTPs is a version that uses SSL to encrypt communications between the client and the server, which is safer. Pure-FTPD is a simple FTP server.
-You can test a FTP connection with:
-```sh
-ftp <user>@<ip>
-```
-
-### Wordpress
-Wordpress is the #1 open source website and blog content manager. It's written in PHP, and uses MySQL as database. MySQL is the most used SQL database, SQL is a language to query data.
-You'll need to use a web server, you can reuse Nginx.
-Your wordpress database (you'll need to import it in MySQL) contains the website IP information, which has to match the IP you access it from. You'll need to input the Minikube IP to the wordpress SQL database. Wordpress also has a wp-config.php file that you'll need to edit so it can access your MySQL service.
-
-You can test a remote MySQL connection with:
-```sh
-# -p only if your user has a password
-mysql <database name> -u <user> -p -h <ip>
-```
-
-### PHPMyAdmin
-PHPMyAdmin is a useful tool to view, query, and edit data from a MySQL database. It can be hosted by any web server, so I recommand you to use Nginx as well as you've used it before. You need to edit phpmyadmin.inc.php file to connect to your MySQL service.
-
-### Grafana
-Grafana is a web dashboard used to visualize data, like a cluster health. It can automatically fetch data from various sources, but we'll use InfluxDB, which is a database engine.
-
-You can test an InfluxDB connection by fecthing /ping endpoint:
-```sh
-curl http://influxdb:8086/ping
-curl http://192.168.0.29/ping
-```
-
-We'll send all container data (CPU usage, memory, processes) easily by using Telegraf. It's a simple program that sends system data to an InfluxDB instance.
-
-So our stack is:
-Telegraf --> InfluxDB --> Grafana
-Get data     Store data   Visualize Data
-
-So there are two connections to configure, Telegraf to InfluxDB which is done in the /etc/telegraf/telegraf.conf file and the Grafana to InfluxDB which is done from the Grafana web interface.
-
-To provide an already-configured version of Grafana, I advise you to setup a blank Grafana setup, launch you container, configure everything. Then save the grafana.db file on your computer (you can use "kubectl cp" to get data from a running pod). You can now copy this file in your Dockerfile.
-
-**Setting up Metallb LoadBalancer:**
-
-- To install MetalLB, apply the manifest:
-
-    ```bash
-    kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.5/manifests/namespace.yaml
-    kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.5/manifests/metallb.yaml
-    # On first install only
-    kubectl create secret generic -n metallb-system memberlist --from-literal=secretkey="$(openssl rand -base64 128)"
-    ```
-
-    ---
-
-- Then chose type of configuration from here:
-
-    [MetalLB, bare metal load-balancer for Kubernetes](https://metallb.universe.tf/configuration/)
-
+# Resources:
+    I made a notion documentation for this project check it out: [notion](https://www.notion.so/Docker-k8s-resources-5d89599a520b479e8f18487aa3e537a3)
+   - Dockerfile reference - [Docker Documentation](https://docs.docker.com/engine/reference/builder/)
+   - Welcome! | minikube - [minikube documentation](https://minikube.sigs.k8s.io/docs/)
+   - Index of /alpine/ - [Alpine Linux](https://dl-cdn.alpinelinux.org/alpine/)
+   - MetalLB - [Configuration](https://metallb.universe.tf/configuration/)
+   - MetalLB - [Usage](https://metallb.universe.tf/usage/)
+   - Installing MariaDB - [MariaDB](https://mariadb.com/kb/en/getting-installing-and-upgrading-mariadb/)
+   - PHP Manual - [Command line usage](https://www.php.net/manual/en/features.commandline.options.php)
+   - Manpage of vsFTPd.conf - [vsFTPd.conf](http://vsftpd.beasts.org/vsftpd_conf.html)
+   - InfluxData Documentation - [InfluxData](https://docs.influxdata.com/)
+   - Grafana Documentation - [Grafana Labs](https://grafana.com/docs/grafana/latest/)
+   - Schema ft_services - [AdrianWR](https://github.com/AdrianWR/ft_services/blob/master/srcs/ft_services.png)
+   - Schema kubernetes - [GuillaumeOz](https://github.com/GuillaumeOz/42_Ft_services/blob/master/assets/schema_ft_services.jpg)
+   - YAML Object Reference - [GuillaumeOz](https://github.com/GuillaumeOz/42_Ft_services/blob/master/doc/yaml_files.md)
+   - Tips for defending - [ft_services on a VM](https://www.notion.so/Ft_services-VM-852d4f9b0d9a42c1a2de921e4a2ac417)
