@@ -29,9 +29,10 @@ Feel free to use my script to install all required software to set you up:
 
 [k8s Session setup](https://github.com/f0rkr/k8s-42-session-setup)
 
-Then use the setup.sh script to build the docker images and deploye kubernetes.
-
-`f0rkr@shell$ sh setup.sh `
+```
+# Use the setup.sh script to build the docker images and deploye kubernetes.
+f0rkr@shell$ sh setup.sh 
+```
 
 # Resources:
    - *I made a notion documentation for this project check it out:* [notion](https://www.notion.so/Docker-k8s-resources-5d89599a520b479e8f18487aa3e537a3)
