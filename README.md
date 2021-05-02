@@ -37,7 +37,7 @@ Then use the setup.sh script to build the docker images and deploye kubernetes.
 `f0rkr@shell$ sh setup.sh`
 
 # Resources:
-    I made a notion documentation for this project check it out: [notion](https://www.notion.so/Docker-k8s-resources-5d89599a520b479e8f18487aa3e537a3)
+   I made a notion documentation for this project check it out: [notion](https://www.notion.so/Docker-k8s-resources-5d89599a520b479e8f18487aa3e537a3)
    - Dockerfile reference - [Docker Documentation](https://docs.docker.com/engine/reference/builder/)
    - Welcome! | minikube - [minikube documentation](https://minikube.sigs.k8s.io/docs/)
    - Index of /alpine/ - [Alpine Linux](https://dl-cdn.alpinelinux.org/alpine/)
