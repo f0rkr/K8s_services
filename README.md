@@ -1,4 +1,6 @@
 # K8s_services
+<center><img align=center src='https://www.all-about-psychology.com/images/700xNxmusic-and-the-brain.jpg.pagespeed.ic.hhSiQ8woan.jpg'/></center>
+
 ### **What are Docker and Kubernetes 🐳**
 
 Docker is a software that allow users to run lightweight virtual machines. You can build Docker "containers" with a Dockerfile. A container is a single lightweight virtual machine running an os, with its own memory space and storage. It is created on an image, which is a template with preconfigured software. A container differs from a virtual machine because it uses the same kernel as the host computer, whereas a virtual machine has its own kernel. Containers are faster and lighter.
